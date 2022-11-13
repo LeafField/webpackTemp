@@ -1,29 +1,21 @@
 const path = require("path");
-const webpackWatchedGlobPlugin = require("webpack-watched-glob-entries-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const { CleanWebpackPlugin } = require("clean-webpack-plugin")
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 
-const entries = webpackWatchedGlobPlugin.getEntries([path.resolve(__dirname, "./src/js/*.js")])();
-
-const htmlGlobPlugins = (entries, srcPath) => {
-  return Object.keys(entries).map(key => new HtmlWebpackPlugin({
-    inject: "body",
-    filename: `${key}.html`,
-    template: `${srcPath}/${key}.html`,
-    chunks: [key],
-  }))
-}
 
 /** @type {import("webpack").Configuration} */
 module.exports = {
 
   mode: "development",
   devtool: "source-map",
-  entry: entries,
+  entry: {
+    index: "./src/js/index.js"
+  },
   output: {
-    path: path.resolve(__dirname, "./dist/js"),
-    filename: "[name].js",
+    path: path.resolve(__dirname, "./dist"),
+    filename: `./js/[name].js`,
   },
   resolve: {
     extensions: ['', '.js', '.jsx'],
@@ -44,12 +36,39 @@ module.exports = {
           },
         ],
       },
+      {
+        test: /\.scss/,
+        use: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"],
+      },
+      {
+        test: /\.(png|jpe?g|gif|svg)$/i,
+        generator: {
+          filename: `./image/[name].[contenthash][ext]`,
+        },
+        type: 'asset/resource',
+      },
+
+      {
+        test: /\.html$/i,
+        loader: 'html-loader',
+      },
     ],
   },
 
   plugins: [
     new CleanWebpackPlugin(),
 
-    ...htmlGlobPlugins(entries, "./src")
+    //複数のCSSを生成したい場合styleの部分を[name]へ変更すると対応するjavascriptファイルの名前へ変更されます
+    new MiniCssExtractPlugin({
+      filename: "style.css",
+    }),
+
+    //webpack-watched-glob-entries-pluginは現在のnodejsのバージョンでは使えないため適宜主導で追加してください
+    new HtmlWebpackPlugin({
+      filename: "index.html",
+      template: "./src/index.html",
+      inject: "body",
+      chunks: ["index"],
+    }),
   ]
 }
