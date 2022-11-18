@@ -36,3 +36,9 @@ React
 ```console
 npm i react react-dom styled-components
 ```
+
+一気にインストール
+
+```console
+npm i -D webpack webpack-cli webpack-dev-server clean-webpack-plugin html-webpack-plugin @babel/core @babel/preset-env @babel/preset-react babel-loader css-loader sass sass-loader mini-css-extract-plugin html-loader
+```
