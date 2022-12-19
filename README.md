@@ -1,6 +1,22 @@
 このリポジトリは学習用環境のテンプレートです  
 以下のモジュールを使用しているのでそれぞれインストールしてください
 
+一気にインストール
+
+デプロイ用
+
+```console
+npm i react react-dom styled-components gsap
+```
+
+開発者用
+
+```console
+npm i -D webpack webpack-cli webpack-dev-server clean-webpack-plugin html-webpack-plugin @babel/core @babel/preset-env @babel/preset-react babel-loader css-loader sass sass-loader mini-css-extract-plugin html-loader postcss postcss-loader autoprefixer
+```
+
+個別にインストールする場合はこちら
+
 webpack 系
 
 ```console
@@ -22,7 +38,7 @@ npm i -D @babel/core @babel/preset-env @babel/preset-react babel-loader
 SASS 関連
 
 ```console
-npm i -D css-loader sass sass-loader mini-css-extract-plugin
+npm i -D css-loader sass sass-loader mini-css-extract-plugin postcss postcss-loader autoprefixer
 ```
 
 画像読み込み用
@@ -37,8 +53,8 @@ React
 npm i react react-dom styled-components
 ```
 
-一気にインストール
+gsap
 
 ```console
-npm i -D webpack webpack-cli webpack-dev-server clean-webpack-plugin html-webpack-plugin @babel/core @babel/preset-env @babel/preset-react babel-loader css-loader sass sass-loader mini-css-extract-plugin html-loader
+npm i gsap
 ```

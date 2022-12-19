@@ -4,11 +4,10 @@ const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 
-
 /** @type {import("webpack").Configuration} */
 module.exports = {
-
-  mode: "development",
+  // 本番環境の場合modeをdevelopmentからproductionへと書き換えてください
+  mode: "production",
   devtool: "source-map",
   entry: {
     index: "./src/js/index.js"
@@ -25,6 +24,7 @@ module.exports = {
   module: {
     rules: [
       {
+        // javascriptのバンドル及びES6とReactのコンパイル
         test: /\.(js|jsx)/,
         exclude: /node_modules/,
         use: [
@@ -36,10 +36,32 @@ module.exports = {
           },
         ],
       },
+      // scssファイルのコンパイル
       {
         test: /\.scss/,
-        use: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"],
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+          },
+          {
+            loader: "css-loader",
+          },
+          {
+            loader: "postcss-loader",
+            options: {
+              postcssOptions: {
+                plugins: [
+                  require('autoprefixer')({ grid: true }),
+                ],
+              },
+            },
+          },
+          {
+            loader: "sass-loader",
+          },
+        ],
       },
+      // 画像ファイルの取り込み、現状では圧縮は別ツールを使用
       {
         test: /\.(png|jpe?g|gif|svg)$/i,
         generator: {
@@ -63,7 +85,7 @@ module.exports = {
       filename: "style.css",
     }),
 
-    //webpack-watched-glob-entries-pluginは現在のnodejsのバージョンでは使えないため適宜主導で追加してください
+    //webpack-watched-glob-entries-pluginは現在のnodejsのバージョンでは使えないため適宜手動で追加してください
     new HtmlWebpackPlugin({
       filename: "index.html",
       template: "./src/index.html",
