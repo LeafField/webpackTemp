@@ -38,7 +38,7 @@ module.exports = {
       },
       // scssファイルのコンパイル
       {
-        test: /\.scss/,
+        test: /\.(css|scss)/,
         use: [
           {
             loader: MiniCssExtractPlugin.loader,
