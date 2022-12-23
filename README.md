@@ -6,7 +6,7 @@
 デプロイ用
 
 ```console
-npm i react react-dom styled-components gsap
+npm i react react-dom styled-components gsap normalize.css
 ```
 
 開発者用
