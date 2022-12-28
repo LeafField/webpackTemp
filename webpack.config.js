@@ -7,8 +7,10 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 /** @type {import("webpack").Configuration} */
 module.exports = {
   // 本番環境の場合modeをdevelopmentからproductionへと書き換えてください
-  mode: "production",
+  mode: "development",
   devtool: "source-map",
+  /** typescriptを使用する際はindex.jsをindex.tsへと変更してください
+   * また、typescriptでreactを扱う場合はエントリーポイントの拡張子もtsxにしてください */
   entry: {
     index: "./src/js/index.js"
   },
@@ -17,12 +19,18 @@ module.exports = {
     filename: `./js/[name].js`,
   },
   resolve: {
-    extensions: ['', '.js', '.jsx'],
+    extensions: ['', '.ts', '.tsx', '.js', '.jsx'],
   },
 
 
   module: {
     rules: [
+      // typescriptのコンパイル
+      {
+        test: /\.(ts|tsx)/,
+        exclude: /node_modules/,
+        use: "ts-loader"
+      },
       {
         // javascriptのバンドル及びES6とReactのコンパイル
         test: /\.(js|jsx)/,

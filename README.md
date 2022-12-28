@@ -9,10 +9,10 @@
 npm i react react-dom styled-components gsap normalize.css
 ```
 
-開発者用
+開発用
 
 ```console
-npm i -D webpack webpack-cli webpack-dev-server clean-webpack-plugin html-webpack-plugin @babel/core @babel/preset-env @babel/preset-react babel-loader css-loader sass sass-loader mini-css-extract-plugin html-loader postcss postcss-loader autoprefixer
+npm i -D webpack webpack-cli webpack-dev-server clean-webpack-plugin html-webpack-plugin @babel/core @babel/preset-env @babel/preset-react babel-loader css-loader sass sass-loader mini-css-extract-plugin html-loader postcss postcss-loader autoprefixer typescript ts-loader
 ```
 
 個別にインストールする場合はこちら
@@ -45,6 +45,12 @@ npm i -D css-loader sass sass-loader mini-css-extract-plugin postcss postcss-loa
 
 ```console
 npm i -D html-loader
+```
+
+typescript
+
+```console
+npm i -D typescript ts-loader
 ```
 
 React
