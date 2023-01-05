@@ -1,8 +1,23 @@
 const path = require("path");
+const fs = require("fs");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
+const HtmlEntries = fs
+  .readdirSync(path.resolve(__dirname, "src"))
+  .filter((filename) => filename.match(/\.html/));
+
+const HtmlWebpackPluginEntries = () => {
+  return HtmlEntries.map((entry) => {
+    return new HtmlWebpackPlugin({
+      filename: `${entry}`,
+      template: `./src/${entry}`,
+      inject: "head",
+      chunks: ["index"],
+    });
+  });
+};
 
 /** @type {import("webpack").Configuration} */
 module.exports = {
@@ -12,16 +27,15 @@ module.exports = {
   /** typescriptを使用する際はindex.jsをindex.tsへと変更してください
    * また、typescriptでreactを扱う場合はエントリーポイントの拡張子もtsxにしてください */
   entry: {
-    index: "./src/js/index.js"
+    index: "./src/js/index.js",
   },
   output: {
     path: path.resolve(__dirname, "./dist"),
     filename: `./js/[name].js`,
   },
   resolve: {
-    extensions: ['', '.ts', '.tsx', '.js', '.jsx'],
+    extensions: ["", ".ts", ".tsx", ".js", ".jsx"],
   },
-
 
   module: {
     rules: [
@@ -29,7 +43,7 @@ module.exports = {
       {
         test: /\.(ts|tsx)/,
         exclude: /node_modules/,
-        use: "ts-loader"
+        use: "ts-loader",
       },
       {
         // javascriptのバンドル及びES6とReactのコンパイル
@@ -46,7 +60,7 @@ module.exports = {
       },
       // scssファイルのコンパイル
       {
-        test: /\.(css|scss)/,
+        test: /\.s?css/,
         use: [
           {
             loader: MiniCssExtractPlugin.loader,
@@ -58,9 +72,7 @@ module.exports = {
             loader: "postcss-loader",
             options: {
               postcssOptions: {
-                plugins: [
-                  require('autoprefixer')({ grid: true }),
-                ],
+                plugins: [require("autoprefixer")({ grid: true })],
               },
             },
           },
@@ -75,12 +87,12 @@ module.exports = {
         generator: {
           filename: `./image/[name].[contenthash][ext]`,
         },
-        type: 'asset/resource',
+        type: "asset/resource",
       },
 
       {
         test: /\.html$/i,
-        loader: 'html-loader',
+        loader: "html-loader",
       },
     ],
   },
@@ -93,12 +105,6 @@ module.exports = {
       filename: "style.css",
     }),
 
-    //webpack-watched-glob-entries-pluginは現在のnodejsのバージョンでは使えないため適宜手動で追加してください
-    new HtmlWebpackPlugin({
-      filename: "index.html",
-      template: "./src/index.html",
-      inject: "body",
-      chunks: ["index"],
-    }),
-  ]
-}
+    ...HtmlWebpackPluginEntries(),
+  ],
+};
